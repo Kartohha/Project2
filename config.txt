@@ -1,0 +1,5 @@
+master_hash=2089b80a6f2f3a57
+failed=3
+lock_until=1765314028
+max_attempts=3
+lock_seconds=300
