@@ -1,9 +1,8 @@
 #include "Application.h"
 #include <iostream>
 #include <sstream>
-#include "ScholarshipType.h"  // Для доступа к ScholarshipType::categoryToString
+#include "ScholarshipType.h" 
 
-// Инициализация статической переменной
 int Application::nextId = 1;
 
 Application::Application(const std::string& user, double avg,
@@ -11,7 +10,6 @@ Application::Application(const std::string& user, double avg,
     : id(nextId++), studentUsername(user), averageGrade(avg),
     status(st), scholarshipCategory(category) {
 
-    // Валидация данных
     if (studentUsername.empty()) {
         throw std::invalid_argument("Имя пользователя не может быть пустым");
     }

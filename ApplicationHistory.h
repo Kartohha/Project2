@@ -13,7 +13,7 @@ enum class HistoryAction {
     MODIFIED      // Заявка изменена
 };
 
-// Структура вне класса
+
 struct HistoryRecord {
     int applicationId;
     std::string studentUsername;
@@ -64,4 +64,4 @@ public:
     void clearHistory();
 };
 
-#endif // APPLICATIONHISTORY_H
+#endif 

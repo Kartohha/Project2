@@ -11,7 +11,6 @@ UserManager::UserManager() {
     std::cout << "Загрузка завершена. Всего пользователей: " << users.size() << std::endl;
 }
 
-// В loadUsers() обновляем загрузку:
 void UserManager::loadUsers() {
     users.clear();
     auto lines = FileManager::readLines("users.txt");
@@ -50,8 +49,7 @@ void UserManager::loadUsers() {
         std::cout << "DEBUG: Роль: " << role << ", Логин: " << username << std::endl;
 
         if (role == "student") {
-            // Убедимся, что достаточно полей
-            if (fields.size() < 16) {  // Минимум 16 полей для студента
+            if (fields.size() < 16) {  
                 std::cout << "DEBUG: У студента " << username
                     << " недостаточно полей (" << fields.size()
                     << " вместо минимум 16), пропускаем" << std::endl;
@@ -59,7 +57,6 @@ void UserManager::loadUsers() {
             }
 
             try {
-                // Извлекаем поля с проверками
                 std::string fio = fields[3];
 
                 double avg = 0.0;
@@ -86,13 +83,11 @@ void UserManager::loadUsers() {
                 std::string specialty = (fields.size() > 14) ? fields[14] : "";
                 std::string scholarshipType = (fields.size() > 15) ? fields[15] : "";
 
-                // Комментарии (могут быть пустыми)
                 std::string socialComment = (fields.size() > 16) ? fields[16] : "";
                 std::string scientificComment = (fields.size() > 17) ? fields[17] : "";
                 std::string conferencesComment = (fields.size() > 18) ? fields[18] : "";
                 std::string activityComment = (fields.size() > 19) ? fields[19] : "";
 
-                // Создаем студента
                 auto student = std::make_shared<Student>(
                     username, passwordHash, fio, avg, hasScholarship,
                     hasSocialBenefits, hasScientificWorks, conferences,
@@ -102,26 +97,25 @@ void UserManager::loadUsers() {
                 );
 
                 users.push_back(student);
-                std::cout << "DEBUG: Успешно загружен студент: " << fio
+                std::cout << "Успешно загружен студент: " << fio
                     << " (логин: " << username << ")" << std::endl;
 
             }
             catch (const std::exception& e) {
-                std::cout << "DEBUG: Ошибка при загрузке студента " << username
+                std::cout << "Ошибка при загрузке студента " << username
                     << ": " << e.what() << std::endl;
             }
         }
         else if (role == "admin") {
             auto admin = std::make_shared<Admin>(username, passwordHash);
             users.push_back(admin);
-            std::cout << "DEBUG: Загружен админ: " << username << std::endl;
+            std::cout << "Загружен админ: " << username << std::endl;
         }
     }
 
-    std::cout << "DEBUG: Загрузка завершена. Всего пользователей: " << users.size() << std::endl;
+    std::cout << "Загрузка завершена. Всего пользователей: " << users.size() << std::endl;
 }
 
-// В saveUsers() обновляем сохранение:
 void UserManager::saveUsers() const {
    
 

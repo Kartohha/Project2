@@ -1,15 +1,5 @@
-﻿  Admin.h
-  Application.cpp
-  ApplicationHistory.cpp
-  ApplicationManager.cpp
-  FileManager.cpp
-  InputValidation.cpp
-  ScholarshipType.cpp
+﻿  ScholarshipType.cpp
   ScholarshipTypeManager.cpp
-  SecurityManager.cpp
-  Student.cpp
-  UserManager.cpp
-  Utils.cpp
   main.cpp
   Generating Code...
   Project2.vcxproj -> D:\БГУИР\КУРСАЧ_2\Project2\x64\Debug\Project2.exe

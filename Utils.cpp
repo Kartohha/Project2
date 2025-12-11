@@ -8,7 +8,6 @@
 #include <cctype>
 
 namespace Utils {
-    // Временное решение - добавляем соль
     std::string generateSalt() {
         static const char alphanum[] =
             "0123456789"
@@ -27,16 +26,12 @@ namespace Utils {
     }
 
     std::string hashPassword(const std::string& password) {
-        // TODO: Заменить на bcrypt/scrypt/Argon2
-        // Временное решение: std::hash с солью
-
-        std::string salt = "scholarship_system_salt_2024"; // Фиксированная соль пока
+        std::string salt = "scholarship_system_salt_2024"; 
         std::string saltedPassword = password + salt;
-
         std::hash<std::string> hasher;
         size_t hash1 = hasher(saltedPassword);
 
-        // Двойное хэширование для увеличения сложности
+        // Двойное хэширование
         std::string hashStr = std::to_string(hash1) + salt;
         size_t hash2 = hasher(hashStr);
 
@@ -73,11 +68,9 @@ namespace Utils {
         ).count();
     }
 
-    // Новые функции для работы с CSV
     std::string escapeCSV(const std::string& field) {
         if (field.empty()) return field;
 
-        // Если поле содержит запятые, кавычки или переносы строк, заключаем в кавычки
         bool needsQuotes = field.find(',') != std::string::npos ||
             field.find('"') != std::string::npos ||
             field.find('\n') != std::string::npos ||
@@ -88,7 +81,7 @@ namespace Utils {
         std::string result = "\"";
         for (char c : field) {
             if (c == '"') {
-                result += "\"\""; // Экранируем кавычку
+                result += "\"\"";
             }
             else {
                 result += c;
@@ -101,7 +94,6 @@ namespace Utils {
     std::string unescapeCSV(const std::string& field) {
         if (field.empty()) return field;
 
-        // Если поле не заключено в кавычки, возвращаем как есть
         if (field.size() < 2 || field.front() != '"' || field.back() != '"') {
             return field;
         }

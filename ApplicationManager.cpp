@@ -1,9 +1,9 @@
 #include "ApplicationManager.h"
 #include "FileManager.h"
-#include "ScholarshipType.h"  // Добавляем
+#include "ScholarshipType.h"
 #include <algorithm>
 #include <sstream>
-#include <iostream>  // Добавить эту строку для std::cout/std::cerr
+#include <iostream>  
 
 ApplicationManager::ApplicationManager(const std::string& filename)
     : applicationsFile(filename), history("history.txt") {
@@ -14,7 +14,7 @@ void ApplicationManager::loadApplications() {
     applications.clear();
     auto lines = FileManager::readLines(applicationsFile);
 
-    int maxId = 0;  // Для отслеживания максимального ID
+    int maxId = 0;  
 
     for (const auto& line : lines) {
         if (line.empty()) continue;
@@ -23,22 +23,17 @@ void ApplicationManager::loadApplications() {
             Application app;
             if (app.loadFromString(line)) {
                 applications.push_back(app);
-                // Обновляем максимальный найденный ID
                 if (app.getId() > maxId) {
                     maxId = app.getId();
                 }
             }
         }
         catch (...) {
-            // Игнорируем некорректные строки
         }
     }
-
-    // Устанавливаем следующий ID как максимальный + 1
     if (maxId > 0) {
         Application::setNextId(maxId + 1);
     }
-    // Если заявок нет, nextId остается = 1 (по умолчанию)
 }
 
 void ApplicationManager::saveApplications() const {
@@ -52,14 +47,11 @@ void ApplicationManager::saveApplications() const {
 }
 
 bool ApplicationManager::addApplication(const Application& app) {
-    // Проверяем, нет ли заявки с таким же ID
     for (const auto& existingApp : applications) {
         if (existingApp.getId() == app.getId()) {
             return false;
         }
     }
-
-    // Добавляем запись в историю
     history.addRecord(app.getId(), app.getStudentUsername(),
         ScholarshipType::categoryToString(app.getScholarshipCategory()),
         HistoryAction::CREATED, "", "Заявка создана");
@@ -73,7 +65,6 @@ bool ApplicationManager::addApplication(const Application& app) {
 bool ApplicationManager::removeApplicationById(int id, const std::string& deleter) {
     for (auto it = applications.begin(); it != applications.end(); ++it) {
         if (it->getId() == id) {
-            // Записываем в историю
             history.addRecord(id, it->getStudentUsername(),
                 ScholarshipType::categoryToString(it->getScholarshipCategory()),
                 HistoryAction::DELETED, deleter, "Заявка удалена");
@@ -91,7 +82,6 @@ bool ApplicationManager::removeApplicationsByStudent(const std::string& username
 
     for (auto it = applications.begin(); it != applications.end();) {
         if (it->getStudentUsername() == username) {
-            // Записываем в историю
             history.addRecord(it->getId(), username,
                 ScholarshipType::categoryToString(it->getScholarshipCategory()),
                 HistoryAction::DELETED, "system", "Заявка удалена вместе со студентом");
@@ -114,7 +104,6 @@ bool ApplicationManager::updateApplicationStatusById(int id, ApplicationStatus n
     const std::string& adminUsername) {
     for (auto& app : applications) {
         if (app.getId() == id) {
-            // Записываем в историю
             HistoryAction action = (newStatus == ApplicationStatus::Approved) ?
                 HistoryAction::APPROVED : HistoryAction::REJECTED;
 
@@ -172,7 +161,6 @@ std::vector<Application> ApplicationManager::searchApplications(double minAvg, d
         if (app.getAverageGrade() < minAvg || app.getAverageGrade() > maxAvg) {
             continue;
         }
-
         // Фильтр по статусу
         if (statusFilter != 0) {
             int appStatus = static_cast<int>(app.getStatus());
@@ -180,10 +168,8 @@ std::vector<Application> ApplicationManager::searchApplications(double minAvg, d
                 continue;
             }
         }
-
         result.push_back(app);
     }
-
     return result;
 }
 

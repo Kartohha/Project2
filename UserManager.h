@@ -24,4 +24,4 @@ public:
     std::vector<std::shared_ptr<IUser>> getAllUsers() const { return users; }
 };
 
-#endif // USERMANAGER_H
+#endif 

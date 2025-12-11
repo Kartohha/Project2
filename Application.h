@@ -2,7 +2,7 @@
 #define APPLICATION_H
 
 #include <string>
-#include "ScholarshipType.h"  // Включаем для использования ScholarshipCategory
+#include "ScholarshipType.h" 
 
 enum class ApplicationStatus { Pending = 0, Approved = 1, Rejected = 2 };
 
@@ -21,22 +21,22 @@ public:
         ScholarshipCategory category = ScholarshipCategory::Academic,
         ApplicationStatus st = ApplicationStatus::Pending);
 
-    // Геттеры
+   
     int getId() const { return id; }
     std::string getStudentUsername() const { return studentUsername; }
     double getAverageGrade() const { return averageGrade; }
     ApplicationStatus getStatus() const { return status; }
     ScholarshipCategory getScholarshipCategory() const { return scholarshipCategory; }
 
-    // Сеттеры
+
     void setStatus(ApplicationStatus s) { status = s; }
     void setScholarshipCategory(ScholarshipCategory category) { scholarshipCategory = category; }
 
-    // Методы для сериализации
+   
     bool loadFromString(const std::string& str);
     std::string saveToString() const;
 
-    // Операторы
+
     bool operator==(const Application& other) const {
         return id == other.id;
     }
@@ -51,7 +51,7 @@ public:
 
     // Статические методы для управления ID
     static void resetIdCounter() { nextId = 1; }
-    static void setNextId(int id); // Добавить этот метод
+    static void setNextId(int id); 
 };
 
-#endif // APPLICATION_H
+#endif 

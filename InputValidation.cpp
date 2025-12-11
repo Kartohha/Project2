@@ -15,7 +15,6 @@ void InputUtils::clearScreen() {
     system("clear");
 #endif
 }
-
 void InputUtils::waitForEnter(const std::string& message) {
     std::cout << message;
     std::cin.ignore();
@@ -24,11 +23,10 @@ void InputUtils::waitForEnter(const std::string& message) {
 
 void InputUtils::printHeader(const std::string& title) {
     clearScreen();
-    std::cout << "========================================\n";
-    std::cout << "          " << title << "\n";
-    std::cout << "========================================\n\n";
+    std::cout << "========================================================\n";
+    std::cout << "                  " << title << "\n";
+    std::cout << "========================================================\n\n";
 }
-
 void InputUtils::printMenu(const std::vector<std::string>& options) {
     for (size_t i = 0; i < options.size(); ++i) {
         std::cout << i + 1 << ". " << options[i] << "\n";
@@ -45,7 +43,7 @@ void InputUtils::printSection(const std::string& title) {
 }
 
 void InputUtils::printSuccess(const std::string& message) {
-    std::cout << "[OK] " << message << "\n";  // Изменено с Unicode символа ✓
+    std::cout << "[OK] " << message << "\n"; 
 }
 
 void InputUtils::printError(const std::string& message) {
@@ -57,7 +55,7 @@ void InputUtils::printInfo(const std::string& message) {
 }
 
 void InputUtils::printWarning(const std::string& message) {
-    std::cout << "[W] " << message << "\n";  // Изменено с Unicode символа ⚠
+    std::cout << "[W] " << message << "\n";
 }
 
 std::string InputUtils::trim(const std::string& str) {
@@ -71,7 +69,6 @@ std::string InputUtils::trim(const std::string& str) {
     return str.substr(start, end - start + 1);
 }
 
-// Старые функции для совместимости
 int InputUtils::getIntInputOld(const std::string& prompt) {
     if (!prompt.empty()) {
         std::cout << prompt;
@@ -119,7 +116,6 @@ std::string InputUtils::getLineInputOld(const std::string& prompt) {
     std::string value;
     std::getline(std::cin, value);
 
-    // Убираем начальные и конечные пробелы
     size_t start = value.find_first_not_of(" \t\n\r");
     size_t end = value.find_last_not_of(" \t\n\r");
 
@@ -132,52 +128,25 @@ std::string InputUtils::getLineInputOld(const std::string& prompt) {
 std::string InputValidator::getPasswordHidden(const std::string& prompt) {
     std::string password;
     std::cout << prompt;
-
-#ifdef _WIN32
-    // Для Windows
+ 
     char ch;
     while (true) {
         ch = _getch();
 
-        if (ch == '\r' || ch == '\n') {  // Enter
+        if (ch == '\r' || ch == '\n') {
             break;
         }
-        else if (ch == '\b') {  // Backspace
-            if (!password.empty()) {
-                password.pop_back();
-                std::cout << "\b \b";  // Стираем звездочку
-            }
-        }
-        else if (ch >= 32 && ch <= 126) {  // Печатные символы
-            password.push_back(ch);
-            std::cout << '*';
-        }
-    }
-#else
-    // Для Linux/macOS
-    struct termios oldt, newt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-    char ch;
-    while (read(STDIN_FILENO, &ch, 1) == 1 && ch != '\n') {
-        if (ch == 127 || ch == '\b') {  // Backspace в Linux
+        else if (ch == '\b') {
             if (!password.empty()) {
                 password.pop_back();
                 std::cout << "\b \b";
             }
         }
-        else if (ch >= 32 && ch <= 126) {  // Печатные символы
+        else if (ch >= 32 && ch <= 126) {
             password.push_back(ch);
             std::cout << '*';
         }
     }
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-#endif
-
     std::cout << std::endl;
     return password;
 }
@@ -190,7 +159,6 @@ std::string InputValidator::getPasswordInput(
 
     while (true) {
         try {
-            // Первый ввод пароля (скрытый)
             password = InputValidator::getPasswordHidden(prompt);
 
             password = InputUtils::trim(password);
@@ -216,7 +184,6 @@ std::string InputValidator::getPasswordInput(
                 throw PasswordException("Пароль должен содержать буквы и цифры");
             }
 
-            // Подтверждение пароля (скрытый ввод)
             std::string confirm = InputValidator::getPasswordHidden("Повторите пароль: ");
             confirm = InputUtils::trim(confirm);
 

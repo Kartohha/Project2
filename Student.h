@@ -11,19 +11,16 @@ class Student : public IUser {
     double averageGrade;
     bool hasScholarship;
     bool hasSocialBenefits;      // НАЛИЧИЕ ЛЬГОТ
-    bool hasScientificWorks;     // НАЛИЧИЕ НАУЧНЫХ РАБОТ (вместо publicationsCount)
+    bool hasScientificWorks;     // НАЛИЧИЕ НАУЧНЫХ РАБОТ 
     int conferencesCount;        // УЧАСТИЕ В КОНФЕРЕНЦИЯХ
     bool isActiveInCommunity;    // ОБЩЕСТВЕННАЯ АКТИВНОСТЬ
 
-    // Новые поля
     StudyForm studyForm;
     int course;
     std::string group;
     std::string faculty;
     std::string specialty;
     std::string scholarshipType;
-
-    // Поля для комментариев (МОЖНО РЕДАКТИРОВАТЬ)
     std::string socialBenefitsComment;    // Комментарий к льготам
     std::string scientificWorksComment;   // Комментарий к научным работам
     std::string conferencesComment;       // Комментарий к участию в конференциях
@@ -44,30 +41,20 @@ public:
 
     std::string getRole() const override { return "student"; }
 
-    // Геттеры существующих полей
     std::string getFio() const { return fio; }
     double getAverageGrade() const { return averageGrade; }
     void setAverageGrade(double g) { averageGrade = g; }
     bool getHasScholarship() const { return hasScholarship; }
     void setHasScholarship(bool s) { hasScholarship = s; }
-
-    // ЛЬГОТЫ - МОЖНО РЕДАКТИРОВАТЬ
     bool getHasSocialBenefits() const { return hasSocialBenefits; }
     void setHasSocialBenefits(bool b) { hasSocialBenefits = b; }
-
-    // НАУЧНЫЕ РАБОТЫ - МОЖНО РЕДАКТИРОВАТЬ (вместо публикаций)
     bool getHasScientificWorks() const { return hasScientificWorks; }
     void setHasScientificWorks(bool has) { hasScientificWorks = has; }
-
-    // КОНФЕРЕНЦИИ - МОЖНО РЕДАКТИРОВАТЬ
     int getConferencesCount() const { return conferencesCount; }
     void setConferencesCount(int count) { conferencesCount = count; }
-
-    // ОБЩЕСТВЕННАЯ АКТИВНОСТЬ - МОЖНО РЕДАКТИРОВАТЬ
     bool getIsActiveInCommunity() const { return isActiveInCommunity; }
     void setIsActiveInCommunity(bool active) { isActiveInCommunity = active; }
 
-    // Геттеры новых полей
     StudyForm getStudyForm() const { return studyForm; }
     void setStudyForm(StudyForm form) { studyForm = form; }
     int getCourse() const { return course; }
@@ -81,7 +68,6 @@ public:
     std::string getScholarshipType() const { return scholarshipType; }
     void setScholarshipType(const std::string& type) { scholarshipType = type; }
 
-    // Геттеры и сеттеры для комментариев - МОЖНО РЕДАКТИРОВАТЬ
     std::string getSocialBenefitsComment() const { return socialBenefitsComment; }
     void setSocialBenefitsComment(const std::string& comment) { socialBenefitsComment = comment; }
 
@@ -94,20 +80,17 @@ public:
     std::string getCommunityActivityComment() const { return communityActivityComment; }
     void setCommunityActivityComment(const std::string& comment) { communityActivityComment = comment; }
     void setFio(const std::string& f) { fio = f; }
-  
 
-    // Вспомогательные методы
     std::string getStudyFormString() const {
         return (studyForm == StudyForm::Budget) ? "Бюджет" : "Платно";
     }
     bool hasEnoughConferences(int requiredCount) const {
         return conferencesCount >= requiredCount;
     }
-    // Методы для получения информации
     std::string getFullInfo() const;       // Полная информация
     std::string getBasicInfo() const;      // Базовая информация
     std::string getAcademicInfo() const;   // Академическая информация
     std::string getCommentsInfo() const;   // Информация о комментариях
 };
 
-#endif // STUDENT_H
+#endif

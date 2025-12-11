@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
-#include <fstream>  // Добавляем для std::ofstream
+#include <fstream> 
 
 ApplicationHistory::ApplicationHistory(const std::string& filename)
     : historyFile(filename) {
@@ -25,7 +25,7 @@ void ApplicationHistory::loadFromFile() {
             parts.push_back(part);
         }
 
-        if (parts.size() < 7) continue;  // Исправлено: было 6, стало 7
+        if (parts.size() < 7) continue;  
 
         try {
             HistoryRecord record;

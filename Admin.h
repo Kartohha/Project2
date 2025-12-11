@@ -9,4 +9,4 @@ public:
     std::string getRole() const override { return "admin"; }
 };
 
-#endif // ADMIN_H
+#endif

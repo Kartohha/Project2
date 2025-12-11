@@ -47,7 +47,6 @@ std::string Student::getFullInfo() const {
     ss << "  Ó÷àñòèå â êîíôåðåíöèÿõ: " << conferencesCount << " ðàç(à)\n";
     ss << "  Îáùåñòâåííàÿ àêòèâíîñòü: " << (isActiveInCommunity ? "Äà" : "Íåò") << "\n\n";
 
-    // Äîáàâëÿåì èíôîðìàöèþ î êîììåíòàðèÿõ
     ss << "ÊÎÌÌÅÍÒÀÐÈÈ È ÄÎÏÎËÍÈÒÅËÜÍÀß ÈÍÔÎÐÌÀÖÈß:\n";
     if (!socialBenefitsComment.empty()) {
         ss << "  Ñîöèàëüíûå ëüãîòû (êîììåíòàðèé): " << socialBenefitsComment << "\n";

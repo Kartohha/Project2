@@ -12,7 +12,6 @@ private:
 public:
     ScholarshipTypeManager();
 
-    // Загрузка и сохранение
     void loadScholarshipTypes();
     void saveScholarshipTypes() const;
 
@@ -44,4 +43,4 @@ public:
         bool isActiveInCommunity = false) const;
 };
 
-#endif // SCHOLARSHIPTYPEMANAGER_H
+#endif 

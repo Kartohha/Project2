@@ -1,5 +1,4 @@
-﻿
-#include "ScholarshipTypeManager.h"
+﻿#include "ScholarshipTypeManager.h"
 #include "FileManager.h"
 #include <sstream>
 #include <fstream>
@@ -10,8 +9,6 @@ ScholarshipTypeManager::ScholarshipTypeManager() {
 
 void ScholarshipTypeManager::loadScholarshipTypes() {
     scholarshipTypes.clear();
-
-    // Создаем стандартные типы стипендий с обновленными описаниями
     scholarshipTypes.push_back(std::make_shared<ScholarshipType>(
         ScholarshipCategory::Academic,
         "Учебная стипендия",
@@ -47,7 +44,6 @@ void ScholarshipTypeManager::loadScholarshipTypes() {
         "Назначается на весь период обучения"
     ));
 
-
     // Загружаем настройки из файла
     auto lines = FileManager::readLines("scholarship_settings.txt");
     for (const auto& line : lines) {
@@ -69,7 +65,6 @@ void ScholarshipTypeManager::loadScholarshipTypes() {
                 }
             }
             catch (...) {
-                // Игнорируем ошибки парсинга
             }
         }
     }
@@ -111,10 +106,9 @@ bool ScholarshipTypeManager::updateScholarshipTypeManager(ScholarshipCategory ca
     return false;
 }
 
-
 std::string ScholarshipTypeManager::getStudentScholarshipInfo(
     double studentAverage, bool hasSocialBenefits,
-    bool hasScientificWorks, int conferences, bool isActiveInCommunity) const {  // ИСПРАВЛЕНО!
+    bool hasScientificWorks, int conferences, bool isActiveInCommunity) const { 
 
     std::stringstream ss;
     ss << "АНАЛИЗ ВОЗМОЖНОСТИ ПОЛУЧЕНИЯ СТИПЕНДИЙ\n";
@@ -127,46 +121,43 @@ std::string ScholarshipTypeManager::getStudentScholarshipInfo(
 
         auto requirements = scholarship->checkRequirements(
             studentAverage, hasSocialBenefits,
-            hasScientificWorks, conferences, isActiveInCommunity  // ИСПРАВЛЕНО!
+            hasScientificWorks, conferences, isActiveInCommunity  
         );
 
         ss << "Основные требования:\n";
         int metCount = 0;
         for (const auto& req : requirements) {
             ss << "  • " << req.description << ": "
-                << (req.isMet ? "[+] ВЫПОЛНЕНО" : "[-] НЕ ВЫПОЛНЕНО") << "\n"; // Изменено с ✓/✗
+                << (req.isMet ? "[+] ВЫПОЛНЕНО" : "[-] НЕ ВЫПОЛНЕНО") << "\n"; 
             if (req.isMet) metCount++;
         }
 
-        // Дополнительная информация (при желании)
         if (scholarship->getCategory() == ScholarshipCategory::Named ||
             scholarship->getCategory() == ScholarshipCategory::Personal ||
             scholarship->getCategory() == ScholarshipCategory::Presidential) {
 
             ss << "\nДополнительные возможности (указываются при желании):\n";
 
-            // Творческая активность
             if (isActiveInCommunity) {
-                ss << "  • Творческая активность: [+] УЧАСТИЕ ЕСТЬ\n"; // Изменено с ✓
+                ss << "  • Общественная активность: [+] УЧАСТИЕ ЕСТЬ\n";
             }
             else {
-                ss << "  • Творческая активность: [-] НЕТ УЧАСТИЯ\n"; // Изменено с ✗
+                ss << "  • Общественная активность: [-] НЕТ УЧАСТИЯ\n"; 
             }
 
-            // Конкретное участие в конференциях
             if (conferences > 0) {
-                ss << "  • Участие в конференциях: [+] " << conferences << " раз(а)\n"; // Изменено с ✓
+                ss << "  • Участие в конференциях: [+] " << conferences << " раз(а)\n"; 
             }
             else {
-                ss << "  • Участие в конференциях: [-] НЕТ УЧАСТИЯ\n"; // Изменено с ✗
+                ss << "  • Участие в конференциях: [-] НЕТ УЧАСТИЯ\n"; 
             }
 
 
-            if (hasScientificWorks) {  // БУЛЕВО!
-                ss << "  • Научные работы: [+] ЕСТЬ\n"; // Изменено с ✓
+            if (hasScientificWorks) {  
+                ss << "  • Научные работы: [+] ЕСТЬ\n"; 
             }
             else {
-                ss << "  • Научные работы: [-] НЕТ\n"; // Изменено с ✗
+                ss << "  • Научные работы: [-] НЕТ\n"; 
             }
         }
 
@@ -192,14 +183,14 @@ std::string ScholarshipTypeManager::getStudentScholarshipInfo(
 
 std::vector<std::shared_ptr<ScholarshipType>> ScholarshipTypeManager::getAvailableScholarshipsForStudent(
     double studentAverage, bool hasSocialBenefits,
-    bool hasScientificWorks, int conferences, bool isActiveInCommunity) const {  // ИСПРАВЛЕНО!
+    bool hasScientificWorks, int conferences, bool isActiveInCommunity) const {  
 
     std::vector<std::shared_ptr<ScholarshipType>> availableScholarships;
 
     for (const auto& type : scholarshipTypes) {
         auto requirements = type->checkRequirements(
             studentAverage, hasSocialBenefits,
-            hasScientificWorks, conferences, isActiveInCommunity  // ИСПРАВЛЕНО!
+            hasScientificWorks, conferences, isActiveInCommunity 
         );
 
         bool allMet = true;
@@ -209,14 +200,11 @@ std::vector<std::shared_ptr<ScholarshipType>> ScholarshipTypeManager::getAvailab
                 break;
             }
         }
-
-        // Дополнительная проверка для учебной стипендии
         if (type->getCategory() == ScholarshipCategory::Academic) {
             if (studentAverage < type->getMinAverageGrade()) {
                 allMet = false;
             }
         }
-
         if (allMet) {
             availableScholarships.push_back(type);
         }

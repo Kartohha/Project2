@@ -7,7 +7,7 @@ class SecurityManager {
     std::string configFile;
     std::string masterHash;
     int failedAttempts;
-    long long lockUntil; // epoch seconds
+    long long lockUntil;
     int maxAttempts;
     int lockSeconds;
     void loadConfig();
@@ -25,4 +25,4 @@ public:
     int getLockSeconds() const { return lockSeconds; }
 };
 
-#endif // SECURITYMANAGER_H
+#endif 

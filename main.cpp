@@ -29,7 +29,6 @@
 
 using namespace std;
 
-// Объявляем функции
 void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
     ScholarshipTypeManager& scholarshipManager, ApplicationManager& appManager);
 void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipManager,
@@ -39,7 +38,6 @@ void studentManagementMenu(UserManager& userManager, ScholarshipTypeManager& sch
     ApplicationManager& appManager);
 void viewApplicationHistory(const ApplicationHistory& history, UserManager& userManager);
 
-// Вспомогательные функции для печати информации
 void printStudentInfo(const std::shared_ptr<Student>& student,
     const ApplicationManager& appManager,
     const ScholarshipTypeManager& scholarshipManager,
@@ -57,7 +55,6 @@ void printStudentInfo(const std::shared_ptr<Student>& student,
     std::cout << "Общественная активность: " << (student->getIsActiveInCommunity() ? "[+] АКТИВЕН" : "[-] НЕ АКТИВЕН") << "\n"; // Изменено с ✅/❌
 }
 
-// Основные обработчики
 void handleLogin(UserManager& userManager, ScholarshipTypeManager& scholarshipManager,
     ApplicationManager& appManager, SecurityManager& security) {
 
@@ -257,7 +254,6 @@ void handleStudentRegistration(UserManager& userManager) {
             10
         );
 
-        // Дополнительные поля
         InputUtils::printSection("Дополнительная информация");
         bool hasSocialBenefits = InputValidator::getYesNoInput("Есть социальные льготы?");
         bool hasScientificWorks = InputValidator::getYesNoInput("Есть научные работы?");
@@ -400,7 +396,6 @@ void handleExit(UserManager& userManager, ApplicationManager& appManager,
     InputUtils::printHeader("Выход");
 
     try {
-        // Сохраняем данные
         SafeExecutor::executeWithRetry([&userManager]() {
             userManager.saveUsers();
             }, "сохранения пользователей");
@@ -426,7 +421,7 @@ void handleExit(UserManager& userManager, ApplicationManager& appManager,
     InputUtils::waitForEnter("Нажмите Enter для выхода...");
 }
 
-// ================ STUDENT MENU ================
+//STUDENT MENU 
 void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
     ScholarshipTypeManager& scholarshipManager, ApplicationManager& appManager) {
 
@@ -474,7 +469,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                     }
 
                     if (!pendingApps.empty()) {
-                        // Создаем подробное сообщение об ошибке (без Unicode символов)
                         std::stringstream errorMsg;
                         errorMsg << "\n!!! ВНИМАНИЕ: У ВАС УЖЕ ЕСТЬ АКТИВНЫЕ ЗАЯВКИ !!!\n\n";
                         errorMsg << "Найдено активных заявок: " << pendingApps.size() << " (в статусе 'Ожидание')\n\n";
@@ -621,13 +615,13 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                                 << " (ваш: " << student->getAverageGrade() << ")\n";
                         }
                         else if (type->getCategory() == ScholarshipCategory::Named) {
-                            std::cout << "   Требуется: балл >= 8.5, научная работа, 1+ конференция\n";  // Заменено ≥ на >=
+                            std::cout << "   Требуется: балл >= 8.5, научная работа, 1+ конференция\n"; 
                         }
                         else if (type->getCategory() == ScholarshipCategory::Personal) {
-                            std::cout << "   Требуется: балл >= 8.0, общественная активность, 3+ конференции\n";  // Заменено ≥ на >=
+                            std::cout << "   Требуется: балл >= 8.0, общественная активность, 3+ конференции\n"; 
                         }
                         else if (type->getCategory() == ScholarshipCategory::Presidential) {
-                            std::cout << "   Требуется: балл >= 9.0, научная работа, общественная активность, 3+ конференции\n";  // Заменено ≥ на >=
+                            std::cout << "   Требуется: балл >= 9.0, научная работа, общественная активность, 3+ конференции\n";  
                         }
 
                         InputUtils::printDivider();
@@ -650,7 +644,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
 
                     auto selectedScholarship = availableScholarships[scholarshipChoice - 1];
 
-                    // Подтверждение выбора
                     InputUtils::printSection("ПОДТВЕРЖДЕНИЕ ВЫБОРА");
                     std::cout << "Вы выбрали: " << selectedScholarship->getName() << "\n";
                     std::cout << "Описание: " << selectedScholarship->getDescription() << "\n";
@@ -689,7 +682,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                 break;
             }
 
-            case 2: {  // Просмотр информации о стипендиях
+            case 2: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Информация о видах стипендий");
 
@@ -716,7 +709,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                         std::cout << "Требования (для вас):\n";
                         for (const auto& req : requirements) {
                             std::cout << "  • " << req.description << ": "
-                                << (req.isMet ? "[+] ВЫПОЛНЕНО" : "[-] НЕ ВЫПОЛНЕНО") << "\n"; // Изменено с ✓/✗
+                                << (req.isMet ? "[+] ВЫПОЛНЕНО" : "[-] НЕ ВЫПОЛНЕНО") << "\n"; 
                         }
 
                         InputUtils::printDivider();
@@ -743,7 +736,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                 break;
             }
 
-            case 3: {  // Анализ возможностей
+            case 3: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Анализ моих возможностей для получения стипендий");
 
@@ -757,12 +750,9 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
 
                     std::cout << analysis;
 
-                    // Рекомендации
                     InputUtils::printSection("РЕКОМЕНДАЦИИ ДЛЯ УЛУЧШЕНИЯ ПРОФИЛЯ");
-
                     std::vector<std::string> recommendations;
 
-                    // Проверяем каждую категорию стипендий
                     std::vector<std::shared_ptr<ScholarshipType>> types = scholarshipManager.getAllScholarshipTypes();
 
                     for (const auto& type : types) {
@@ -796,7 +786,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                 break;
             }
 
-            case 4: {  // Мои заявки
+            case 4: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Мои заявки");
                     std::vector<Application> apps = appManager.getApplicationsByStudent(student->getUsername());
@@ -821,7 +811,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                 break;
             }
 
-            case 5: {  // Удаление заявки
+            case 5: {
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Удаление заявки");
                     std::vector<Application> apps = appManager.getApplicationsByStudent(student->getUsername());
@@ -878,7 +868,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                         throw std::runtime_error("Заявка не найдена или недоступна для удаления.");
                     }
 
-                    // Подтверждение удаления
+                   
                     if (!InputValidator::confirmAction("Удалить заявку #" + std::to_string(appId) + "?")) {
                         InputUtils::printInfo("Удаление отменено.");
                         InputUtils::waitForEnter("Нажмите Enter для продолжения...");
@@ -897,7 +887,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                 break;
             }
 
-            case 6: {  // Смена пароля
+            case 6: {
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Смена пароля");
 
@@ -937,10 +927,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                     while (editing) {
                         InputUtils::printHeader("Редактирование профиля: " + student->getFio());
 
-                        // =================== ТЕКУЩАЯ ИНФОРМАЦИЯ С НУМЕРАЦИЕЙ ===================
                         std::cout << "=== ВАШИ ТЕКУЩИЕ ДАННЫЕ ===\n\n";
-
-                        // Основная информация
                         std::cout << "ОСНОВНАЯ ИНФОРМАЦИЯ:\n";
                         std::cout << "  [1] ФИО: " << student->getFio() << "\n";
                         std::cout << "  [2] Форма обучения: " << student->getStudyFormString() << "\n";
@@ -948,8 +935,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                         std::cout << "  [4] Группа: " << student->getGroup() << "\n";
                         std::cout << "  [5] Факультет: " << student->getFaculty() << "\n";
                         std::cout << "  [6] Специальность: " << student->getSpecialty() << "\n\n";
-
-                        // Академическая информация
                         std::cout << "АКАДЕМИЧЕСКАЯ ИНФОРМАЦИЯ:\n";
                         std::cout << "  [7] Средний балл: " << std::fixed << std::setprecision(2)
                             << student->getAverageGrade() << "/10.0\n";
@@ -976,8 +961,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             std::cout << " (комментарий: " << student->getCommunityActivityComment() << ")";
                         }
                         std::cout << "\n\n";
-
-                        // Комментарии
                         std::cout << "КОММЕНТАРИИ:\n";
                         std::cout << "  [12] Комментарий к льготам: "
                             << (student->getSocialBenefitsComment().empty() ? "не указан" : student->getSocialBenefitsComment()) << "\n";
@@ -989,8 +972,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             << (student->getCommunityActivityComment().empty() ? "не указан" : student->getCommunityActivityComment()) << "\n";
 
                         InputUtils::printDivider();
-
-                        // =================== МЕНЮ РЕДАКТИРОВАНИЯ ===================
                         std::cout << "=== РЕДАКТИРОВАНИЕ ===\n";
                         std::cout << "Выберите номер пункта для редактирования:\n";
                         std::cout << "  1-15 - Редактировать соответствующий пункт\n";
@@ -1007,13 +988,11 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             editing = false;
                             continue;
                         }
-
-                        // Очищаем экран перед редактированием конкретного пункта
                         InputUtils::clearScreen();
                         InputUtils::printHeader("Редактирование профиля");
 
                         switch (editChoice) {
-                        case 1: {  // ФИО
+                        case 1: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ ФИО");
                             std::cout << "Текущее ФИО: " << student->getFio() << "\n\n";
 
@@ -1031,7 +1010,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 2: {  // Форма обучения
+                        case 2: {  
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ ФОРМЫ ОБУЧЕНИЯ");
                             std::cout << "Текущая форма: " << student->getStudyFormString() << "\n\n";
 
@@ -1051,7 +1030,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 3: {  // Курс
+                        case 3: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ КУРСА");
                             std::cout << "Текущий курс: " << student->getCourse() << "\n\n";
 
@@ -1066,7 +1045,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 4: {  // Группа
+                        case 4: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ ГРУППЫ");
                             std::cout << "Текущая группа: " << student->getGroup() << "\n\n";
 
@@ -1082,7 +1061,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 5: {  // Факультет
+                        case 5: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ ФАКУЛЬТЕТА");
                             std::cout << "Текущий факультет: " << student->getFaculty() << "\n\n";
 
@@ -1098,7 +1077,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 6: {  // Специальность
+                        case 6: {  
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ СПЕЦИАЛЬНОСТИ");
                             std::cout << "Текущая специальность: " << student->getSpecialty() << "\n\n";
 
@@ -1114,7 +1093,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 7: {  // Средний балл
+                        case 7: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ СРЕДНЕГО БАЛЛА");
                             std::cout << "Текущий средний балл: " << student->getAverageGrade() << "/10.0\n\n";
 
@@ -1129,7 +1108,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 8: {  // Социальные льготы
+                        case 8: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ СОЦИАЛЬНЫХ ЛЬГОТ");
                             std::cout << "Текущий статус: " << (student->getHasSocialBenefits() ? "Есть льготы" : "Нет льгот") << "\n";
                             std::cout << "Комментарий: " <<
@@ -1137,8 +1116,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
 
                             bool newValue = InputValidator::getYesNoInput("Есть социальные льготы? ");
                             student->setHasSocialBenefits(newValue);
-
-                            // Спросить о комментарии
                             if (InputValidator::getYesNoInput("Добавить/изменить комментарий к льготам?")) {
                                 std::string comment = InputValidator::getLineInput(
                                     "Введите комментарий (оставьте пустым для удаления): ",
@@ -1155,7 +1132,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 9: {  // Научные работы
+                        case 9: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ НАУЧНЫХ РАБОТ");
                             std::cout << "Текущий статус: " << (student->getHasScientificWorks() ? "Есть научные работы" : "Нет научных работ") << "\n";
                             std::cout << "Комментарий: " <<
@@ -1164,7 +1141,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             bool newValue = InputValidator::getYesNoInput("Есть научные работы? ");
                             student->setHasScientificWorks(newValue);
 
-                            // Спросить о комментарии
                             if (InputValidator::getYesNoInput("Добавить/изменить комментарий к научным работам?")) {
                                 std::string comment = InputValidator::getLineInput(
                                     "Введите комментарий (оставьте пустым для удаления): ",
@@ -1181,7 +1157,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 10: {  // Конференции
+                        case 10: { 
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ КОНФЕРЕНЦИЙ");
                             std::cout << "Текущее количество: " << student->getConferencesCount() << " конференций\n";
                             std::cout << "Комментарий: " <<
@@ -1194,8 +1170,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             );
 
                             student->setConferencesCount(confs);
-
-                            // Спросить о комментарии
                             if (InputValidator::getYesNoInput("Добавить/изменить комментарий к конференциям?")) {
                                 std::string comment = InputValidator::getLineInput(
                                     "Введите комментарий (оставьте пустым для удаления): ",
@@ -1212,7 +1186,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 11: {  // Общественная активность
+                        case 11: {  
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ ОБЩЕСТВЕННОЙ АКТИВНОСТИ");
                             std::cout << "Текущий статус: " << (student->getIsActiveInCommunity() ? "Активен" : "Не активен") << "\n";
                             std::cout << "Комментарий: " <<
@@ -1220,8 +1194,6 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
 
                             bool newValue = InputValidator::getYesNoInput("Активен в общественной жизни? ");
                             student->setIsActiveInCommunity(newValue);
-
-                            // Спросить о комментарии
                             if (InputValidator::getYesNoInput("Добавить/изменить комментарий к общественной активности?")) {
                                 std::string comment = InputValidator::getLineInput(
                                     "Введите комментарий (оставьте пустым для удаления): ",
@@ -1233,12 +1205,10 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                                 );
                                 student->setCommunityActivityComment(comment);
                             }
-
                             InputUtils::printSuccess("Информация об общественной активности успешно обновлена!");
                             break;
                         }
-
-                        case 12: {  // Комментарий к льготам
+                        case 12: {  
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ КОММЕНТАРИЯ К ЛЬГОТАМ");
                             std::cout << "Текущий комментарий: " <<
                                 (student->getSocialBenefitsComment().empty() ? "не указан" : student->getSocialBenefitsComment()) << "\n\n";
@@ -1257,7 +1227,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 13: {  // Комментарий к научным работам
+                        case 13: {  
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ КОММЕНТАРИЯ К НАУЧНЫМ РАБОТАМ");
                             std::cout << "Текущий комментарий: " <<
                                 (student->getScientificWorksComment().empty() ? "не указан" : student->getScientificWorksComment()) << "\n\n";
@@ -1276,7 +1246,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 14: {  // Комментарий к конференциям
+                        case 14: {  
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ КОММЕНТАРИЯ К КОНФЕРЕНЦИЯМ");
                             std::cout << "Текущий комментарий: " <<
                                 (student->getConferencesComment().empty() ? "не указан" : student->getConferencesComment()) << "\n\n";
@@ -1295,7 +1265,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
 
-                        case 15: {  // Комментарий к общественной активности
+                        case 15: {  
                             InputUtils::printSection("РЕДАКТИРОВАНИЕ КОММЕНТАРИЯ К ОБЩЕСТВЕННОЙ АКТИВНОСТИ");
                             std::cout << "Текущий комментарий: " <<
                                 (student->getCommunityActivityComment().empty() ? "не указан" : student->getCommunityActivityComment()) << "\n\n";
@@ -1314,17 +1284,11 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
                             break;
                         }
                         }
-
-                        // Сохраняем изменения после каждого редактирования
                         userManager.saveUsers();
-
-                        // Пауза перед возвратом к просмотру данных
                         InputUtils::printDivider();
                         InputUtils::printInfo("Данные обновлены. Нажмите Enter для продолжения...");
                         std::cin.ignore();
                         std::cin.get();
-
-                        // Очищаем экран перед показом обновленных данных
                         InputUtils::clearScreen();
                     }
                     }, "редактирования профиля");
@@ -1353,7 +1317,7 @@ void studentMenu(std::shared_ptr<Student> student, UserManager& userManager,
     }
 }
 
-// ================ ADMIN MENU ================
+// ADMIN MENU 
 void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipManager,
     ApplicationManager& appManager, SecurityManager& security,
     const std::string& adminUsername) {
@@ -1383,7 +1347,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
             if (choice == 10) break;
 
             switch (choice) {
-            case 1: {  // Управление критериями стипендий
+            case 1: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Управление критериями стипендий");
 
@@ -1438,8 +1402,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                 InputUtils::waitForEnter("Нажмите Enter для продолжения...");
                 break;
             }
-
-            case 2: {  // Поиск заявок (упрощенный - по ID)
+            case 2: {  
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Поиск заявки по ID");
 
@@ -1461,7 +1424,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                     }
 
                     switch (searchChoice) {
-                    case 1: {  // Поиск по ID заявки
+                    case 1: {  
                         int appId = InputValidator::getIntInput(
                             "Введите ID заявки: ",
                             [](int val) { return val > 0; },
@@ -1488,8 +1451,6 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                             std::cout << "Средний балл: " << app->getAverageGrade() << "\n";
                             std::cout << "Тип стипендии: " << ScholarshipType::categoryToString(app->getScholarshipCategory()) << "\n";
                             std::cout << "Статус: " << Utils::statusToString(static_cast<int>(app->getStatus())) << "\n";
-
-                            // Показать дополнительные действия
                             InputUtils::printDivider();
                             std::vector<std::string> actionOptions = {
                                 "Изменить статус заявки",
@@ -1745,7 +1706,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                             throw std::runtime_error("Студент с таким логином не найден.");
                         }
 
-                        int count = static_cast<int>(appManager.getApplicationsByStudent(username).size()); // Исправлено предупреждение C4267
+                        int count = static_cast<int>(appManager.getApplicationsByStudent(username).size()); 
                         if (count == 0) {
                             InputUtils::printInfo("У студента нет заявок.");
                             return;
@@ -1790,7 +1751,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                 break;
             }
 
-            case 5: {  // Управление пользователями
+            case 5: {  
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Управление пользователями");
 
@@ -1809,7 +1770,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                     );
 
                     switch (action) {
-                    case 1: {  // Добавить студента
+                    case 1: { 
                         InputUtils::printHeader("Добавление студента");
 
                         std::string username = InputValidator::getStringInput(
@@ -1850,7 +1811,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                         break;
                     }
 
-                    case 2: {  // Добавить администратора
+                    case 2: {  
                         InputUtils::printHeader("Добавление администратора");
 
                         if (security.isLocked()) {
@@ -1891,7 +1852,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                         break;
                     }
 
-                    case 3: {  // Удалить пользователя
+                    case 3: { 
                         InputUtils::printHeader("Удаление пользователя");
 
                         std::string username = InputValidator::getStringInput(
@@ -1934,7 +1895,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                         break;
                     }
 
-                    case 4: {  // Просмотреть всех пользователей
+                    case 4: {  
                         InputUtils::printHeader("Все пользователи");
                         auto users = userManager.getAllUsers();
 
@@ -1974,7 +1935,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                 break;
             }
 
-            case 8: {  // Сменить мастер-пароль
+            case 8: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Смена мастер-пароля");
 
@@ -2011,7 +1972,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
                 break;
             }
 
-            case 9: {  // Редактировать свой аккаунт
+            case 9: {  
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Редактирование своего аккаунтa");
 
@@ -2068,7 +2029,7 @@ void adminMenu(UserManager& userManager, ScholarshipTypeManager& scholarshipMana
     }
 }
 
-// ================ ПРОСМОТР ИСТОРИИ ЗАЯВОК ================
+//ПРОСМОТР ИСТОРИИ ЗАЯВОК=
 void viewApplicationHistory(const ApplicationHistory& history, UserManager& userManager) {
     while (true) {
         try {
@@ -2095,7 +2056,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
             if (choice == 10) break;
 
             switch (choice) {
-            case 1: {  // Вся история
+            case 1: {  
                 InputUtils::printHeader("ВСЯ ИСТОРИЯ ЗАЯВОК");
                 auto allRecords = history.getAllRecords();
 
@@ -2111,7 +2072,6 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                         InputUtils::printDivider();
                     }
 
-                    // Статистика внизу
                     std::cout << "\nСТАТИСТИКА:\n";
                     std::cout << "  Создано: " << history.getActionCount(HistoryAction::CREATED) << "\n";
                     std::cout << "  Одобрено: " << history.getActionCount(HistoryAction::APPROVED) << "\n";
@@ -2122,7 +2082,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                 break;
             }
 
-            case 2: {  // Одобренные заявки
+            case 2: {  
                 InputUtils::printHeader("ОДОБРЕННЫЕ ЗАЯВКИ");
                 auto approved = history.getRecordsByAction(HistoryAction::APPROVED);
 
@@ -2142,7 +2102,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                 break;
             }
 
-            case 3: {  // Отклоненные заявки
+            case 3: {  
                 InputUtils::printHeader("ОТКЛОНЕННЫЕ ЗАЯВКИ");
                 auto rejected = history.getRecordsByAction(HistoryAction::REJECTED);
 
@@ -2162,7 +2122,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                 break;
             }
 
-            case 4: {  // Удаленные заявки
+            case 4: { 
                 InputUtils::printHeader("УДАЛЕННЫЕ ЗАЯВКИ");
                 auto deleted = history.getRecordsByAction(HistoryAction::DELETED);
 
@@ -2182,7 +2142,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                 break;
             }
 
-            case 5: {  // Поиск по студенту
+            case 5: {
                 InputUtils::printHeader("ПОИСК ПО СТУДЕНТУ");
 
                 std::string username = InputValidator::getStringInput(
@@ -2200,8 +2160,6 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                 else {
                     std::cout << "Найдено записей: " << studentRecords.size() << "\n";
                     InputUtils::printDivider();
-
-                    // Статистика по студенту
                     int approved = 0, rejected = 0, created = 0, deleted = 0;
                     for (const auto& record : studentRecords) {
                         std::cout << record.toString() << "\n";
@@ -2226,7 +2184,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                 break;
             }
 
-            case 6: {  // Поиск по администратору
+            case 6: {  
                 InputUtils::printHeader("ПОИСК ПО АДМИНИСТРАТОРУ");
 
                 std::string admin = InputValidator::getStringInput(
@@ -2236,7 +2194,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                     false
                 );
 
-                // Используем метод поиска
+                // метод поиска
                 auto allRecords = history.getAllRecords();
                 std::vector<HistoryRecord> adminRecords;
 
@@ -2262,7 +2220,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                 break;
             }
 
-            case 7: {  // Общий поиск
+            case 7: {  
                 InputUtils::printHeader("ОБЩИЙ ПОИСК");
 
                 std::string keyword = InputValidator::getLineInput(
@@ -2377,7 +2335,6 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
                     auto now = std::chrono::system_clock::now();
                     auto now_time = std::chrono::system_clock::to_time_t(now);
 
-                    // Безопасная версия ctime
                     char timeStr[26];
                     ctime_s(timeStr, sizeof(timeStr), &now_time);
                     file << timeStr << "\n";
@@ -2416,7 +2373,7 @@ void viewApplicationHistory(const ApplicationHistory& history, UserManager& user
     }
 }
 
-// ================ УПРАВЛЕНИЕ СТУДЕНТАМИ ================
+// УПРАВЛЕНИЕ СТУДЕНТАМИ
 void studentManagementMenu(UserManager& userManager,
     ScholarshipTypeManager& scholarshipManager,
     ApplicationManager& appManager) {
@@ -2441,7 +2398,7 @@ void studentManagementMenu(UserManager& userManager,
             if (choice == 6) break;
 
             switch (choice) {
-            case 1: {  // Просмотр всех студентов (кратко)
+            case 1: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Все студенты (краткая информация)");
 
@@ -2468,7 +2425,7 @@ void studentManagementMenu(UserManager& userManager,
                         std::string currentFaculty = "";
 
                         for (const auto& stu : students) {
-                            // Выводим заголовок курса/факультета при изменении
+                            // Вывод заголовка курса/факультета при изменении
                             if (stu->getCourse() != currentCourse || stu->getFaculty() != currentFaculty) {
                                 currentCourse = stu->getCourse();
                                 currentFaculty = stu->getFaculty();
@@ -2646,7 +2603,7 @@ void studentManagementMenu(UserManager& userManager,
                 break;
             }
 
-            case 4: {  // Анализ возможностей студента
+            case 4: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Анализ возможностей студента");
 
@@ -2683,7 +2640,6 @@ void studentManagementMenu(UserManager& userManager,
 
                     std::cout << analysis;
 
-                    // Рекомендации
                     InputUtils::printSection("РЕКОМЕНДАЦИИ");
 
                     auto types = scholarshipManager.getAllScholarshipTypes();
@@ -2711,7 +2667,7 @@ void studentManagementMenu(UserManager& userManager,
                         }
 
                         if (allMet && type->getName() != "Учебная стипендия") {
-                            std::cout << "  [+] " << stu->getFio() << " соответствует всем требованиям для " // Изменено с ✅
+                            std::cout << "  [+] " << stu->getFio() << " соответствует всем требованиям для " 
                                 << type->getName() << "!\n";
                         }
                     }
@@ -2724,7 +2680,7 @@ void studentManagementMenu(UserManager& userManager,
                 break;
             }
 
-            case 5: {  // Статистика по студентам
+            case 5: { 
                 SafeExecutor::execute([&]() {
                     InputUtils::printHeader("Статистика по студентам");
 
@@ -2734,8 +2690,7 @@ void studentManagementMenu(UserManager& userManager,
                         return;
                     }
 
-                    // Собираем статистику
-                    int totalStudents = static_cast<int>(students.size()); // Исправлено предупреждение C4267
+                    int totalStudents = static_cast<int>(students.size());
                     int budgetStudents = 0, paidStudents = 0;
                     int scholarshipStudents = 0;
                     int byCourse[4] = { 0, 0, 0, 0 };
@@ -2768,7 +2723,6 @@ void studentManagementMenu(UserManager& userManager,
                         totalAverage += stu->getAverageGrade();
                     }
 
-                    // Выводим статистику
                     std::cout << "ОБЩАЯ СТАТИСТИКА:\n";
                     std::cout << "  Всего студентов: " << totalStudents << "\n";
                     std::cout << "  Бюджетная форма: " << budgetStudents << " ("
@@ -2817,27 +2771,21 @@ void studentManagementMenu(UserManager& userManager,
     }
 }
 
-// ================ MAIN FUNCTION ================
 int main() {
-    // Инициализация кодировки
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
     setlocale(LC_ALL, "Russian");
 
-    // Устанавливаем обработчик необработанных исключений
     std::set_terminate([]() {
         InputUtils::printError("Необработанное исключение! Программа будет завершена.");
         std::exit(1);
         });
 
     try {
-        // Инициализация менеджеров
         UserManager userManager;
         ScholarshipTypeManager scholarshipManager;
         ApplicationManager appManager;
         SecurityManager security("config.txt");
-
-        // Обеспечиваем наличие мастер-пароля
         SafeExecutor::execute([&security]() {
             security.ensureDefaultMaster();
             }, "инициализации безопасности");

@@ -15,7 +15,7 @@
 #include <type_traits>
 #include <random>
 
-// ================ КЛАССЫ ИСКЛЮЧЕНИЙ ================
+//КЛАССЫ ИСКЛЮЧЕНИЙ
 class InputException : public std::exception {
 protected:
     std::string message;
@@ -71,7 +71,7 @@ public:
         : FileException(filename, "записи") {}
 };
 
-// ================ УТИЛИТЫ ================
+
 class InputUtils {
 public:
     static void clearStdin();
@@ -87,18 +87,17 @@ public:
     static void printWarning(const std::string& message);
     static std::string trim(const std::string& str);
 
-    // Старые функции для совместимости
+ 
     static int getIntInputOld(const std::string& prompt = "");
     static double getDoubleInputOld(const std::string& prompt = "");
     static std::string getStringInputOld(const std::string& prompt = "");
     static std::string getLineInputOld(const std::string& prompt = "");
 };
 
-// ================ ВАЛИДАЦИЯ ВВОДА ================
-// ================ ВАЛИДАЦИЯ ВВОДА ================
+//ВАЛИДАЦИЯ ВВОДА
 class InputValidator {
 public:
-    // Шаблонная функция для ввода числа
+    //для ввода числа
     template<typename T>
     static T getNumberInput(
         const std::string& prompt,
@@ -258,16 +257,16 @@ public:
         }
     }
 
-    // Ввод пароля со звездочками (скрытый ввод)
+    // Ввод пароля со звездочками
     static std::string getPasswordHidden(const std::string& prompt = "Пароль: ");
 
-    // Ввод пароля с проверкой (со звездочками)
+    // Ввод пароля с проверкой
     static std::string getPasswordInput(
         const std::string& prompt = "Пароль: ",
         int minLength = 6
     );
 
-    // Выбор из меню
+  
     static int getMenuChoice(
         const std::string& title,
         const std::vector<std::string>& options,
@@ -356,10 +355,9 @@ private:
     }
 };
 
-// ================ БЕЗОПАСНОЕ ВЫПОЛНЕНИЕ ================
+
 class SafeExecutor {
 public:
-    // Выполнение операции с обработкой исключений
     template<typename Func, typename... Args>
     static bool execute(Func func, const std::string& operationName, Args&&... args) {
         try {
@@ -384,7 +382,6 @@ public:
         }
     }
 
-    // Выполнение с возвратом значения (ИСПРАВЛЕНО: заменили std::result_of на std::invoke_result_t)
     template<typename Func, typename... Args>
     static auto executeWithResult(Func func, const std::string& operationName, Args&&... args)
         -> std::pair<bool, typename std::invoke_result<Func, Args...>::type> {
@@ -404,8 +401,6 @@ public:
             return { false, ReturnType() };
         }
     }
-
-    // Выполнение с повторными попытками (ИСПРАВЛЕНО: заменили std::result_of на std::invoke_result_t)
     template<typename Func, typename... Args>
     static auto executeWithRetry(Func func, const std::string& operationName,
         int maxRetries = 3, Args&&... args)
@@ -437,7 +432,7 @@ public:
     }
 };
 
-// ================ ВАЛИДАТОРЫ ================
+//ВАЛИДАТОРЫ
 class Validators {
 public:
     // Проверка логина
@@ -486,7 +481,7 @@ public:
         return true;
     }
 
-    // Проверка курса - ТОЛЬКО 1-4
+    // Проверка курса - 1-4
     static bool validateCourse(int course) {
         if (course < 1 || course > 4) {
             throw RangeException("Курс должен быть от 1 до 4");
@@ -510,15 +505,15 @@ public:
         return true;
     }
 
-    // Проверка факультета - ТОЛЬКО буквы, 2-5 символов
+    // Проверка факультета - буквы, 2-5 символов
     static bool validateFaculty(const std::string& faculty) {
         if (faculty.length() < 2 || faculty.length() > 5) {
             throw RangeException("Название факультета должно быть от 2 до 5 символов");
         }
 
-        // Проверяем, что все символы - буквы
+        // Проверка, что все символы - буквы
         for (char c : faculty) {
-            // Проверяем русские и английские буквы
+            // Проверка русские и английские буквы
             bool isRussianLetter = (c >= 'А' && c <= 'я') || c == 'ё' || c == 'Ё';
             bool isEnglishLetter = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 
@@ -536,9 +531,9 @@ public:
             throw RangeException("Название специальности должно быть от 1 до 7 символов");
         }
 
-        // Проверяем, что все символы - буквы
+        // Проверка, что все символы - буквы
         for (char c : specialty) {
-            // Проверяем русские и английские буквы
+            // Проверка русские и английские буквы
             bool isRussianLetter = (c >= 'А' && c <= 'я') || c == 'ё' || c == 'Ё';
             bool isEnglishLetter = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
 
@@ -584,4 +579,4 @@ public:
     
 };
 
-#endif // INPUTVALIDATION_H
+#endif 

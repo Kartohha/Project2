@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <sstream>
 
-// Конструктор
 ScholarshipType::ScholarshipType(ScholarshipCategory cat, const std::string& name,
     const std::string& desc, const std::string& period)
     : category(cat), name(name), description(desc), recalculationPeriod(period),
@@ -45,8 +44,6 @@ ScholarshipType::ScholarshipType(ScholarshipCategory cat, const std::string& nam
     }
 }
 
-
-
 std::vector<ScholarshipRequirement> ScholarshipType::checkRequirements(
     double studentAverage, bool hasSocialBenefits,
     bool hasScientificWorks, int conferences, bool isActiveInCommunity) const {
@@ -73,7 +70,6 @@ std::vector<ScholarshipRequirement> ScholarshipType::checkRequirements(
             req.isMet = hasScientificWorks;
         }
         else if (desc.find("конференц") != std::string::npos) {
-            // Проверяем количество конференций
             if (desc.find("минимум 1") != std::string::npos) {
                 req.isMet = (conferences >= 1);
             }
@@ -92,7 +88,6 @@ std::vector<ScholarshipRequirement> ScholarshipType::checkRequirements(
             req.isMet = true;
         }
     }
-
     return result;
 }
 
@@ -170,6 +165,5 @@ std::string ScholarshipType::getRecommendations(double studentAverage,
             ss << "• Принять участие минимум в 3 конференциях (текущее количество: " << conferences << ")\n";
         }
     }
-
     return ss.str();
 }

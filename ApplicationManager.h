@@ -4,8 +4,8 @@
 #include <vector>
 #include <string>
 #include "Application.h"
-#include "ScholarshipType.h"  // Добавляем для categoryToString
-#include "ApplicationHistory.h"  // Добавляем
+#include "ScholarshipType.h"  
+#include "ApplicationHistory.h"  
 
 class ApplicationManager {
 private:
@@ -40,4 +40,4 @@ public:
     const ApplicationHistory& getHistory() const { return history; }
 };
 
-#endif // APPLICATIONMANAGER_H
+#endif 

@@ -16,4 +16,4 @@ public:
     virtual std::string getRole() const = 0;
 };
 
-#endif // IUSER_H
+#endif
